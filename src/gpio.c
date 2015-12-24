@@ -1,6 +1,7 @@
+#include <inc/gpio.h>
 #include <inc/rpi_peripherals.h>
 
-void SetGpioFunction(int pin, int function)
+void gpio_pin_set_function(int pin, int function)
 {
   if (pin > GPIO_PIN_MAX || function > GPIO_FUNC_MAX)
     return;
@@ -13,7 +14,7 @@ void SetGpioFunction(int pin, int function)
   gpioRegs->gpioFunctionReg[funcReg] = (gpioRegs->gpioFunctionReg[funcReg] & funcValMaskInv) | funcVal;
 }
 
-void SetGpio(int pin, int value)
+void gpio_pin_write(int pin, int value)
 {
   if (pin > GPIO_PIN_MAX)
     return;

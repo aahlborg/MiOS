@@ -40,32 +40,32 @@
 #endif
 
 struct rpi_gpio_regs {
-  int gpioFunctionReg[6];
-  int reserved0;
-  int gpioPinOutputSet[2];
-  int reserved1;
-  int gpioPinOutputClear[2];
-  int reserved2;
-  int gpioPinLevel[2];
-  int reserved3;
-  int gpioPinEventDetectStatus[2];
-  int reserved4;
-  int gpioPinRisingEdgeDetectEnable[2];
-  int reserved5;
-  int gpioPinFallingEdgeDetectEnable[2];
-  int reserved6;
-  int gpioPinHighDetectEnable[2];
-  int reserved7;
-  int gpioPinLowDetectEnable[2];
-  int reserved8;
-  int gpioPinAsyncRisingEdgeDetect[2];
-  int reserved9;
-  int gpioPinAsyncFallingEdgeDetect[2];
-  int reserved10;
-  int gpioPinPullUpDownEnable;
-  int gpioPinPullUpDownEnableClock[2];
-  int reserved11;
-  int test;
+  volatile int gpioFunctionReg[6];
+  volatile int reserved0;
+  volatile int gpioPinOutputSet[2];
+  volatile int reserved1;
+  volatile int gpioPinOutputClear[2];
+  volatile int reserved2;
+  volatile int gpioPinLevel[2];
+  volatile int reserved3;
+  volatile int gpioPinEventDetectStatus[2];
+  volatile int reserved4;
+  volatile int gpioPinRisingEdgeDetectEnable[2];
+  volatile int reserved5;
+  volatile int gpioPinFallingEdgeDetectEnable[2];
+  volatile int reserved6;
+  volatile int gpioPinHighDetectEnable[2];
+  volatile int reserved7;
+  volatile int gpioPinLowDetectEnable[2];
+  volatile int reserved8;
+  volatile int gpioPinAsyncRisingEdgeDetect[2];
+  volatile int reserved9;
+  volatile int gpioPinAsyncFallingEdgeDetect[2];
+  volatile int reserved10;
+  volatile int gpioPinPullUpDownEnable;
+  volatile int gpioPinPullUpDownEnableClock[2];
+  volatile int reserved11;
+  volatile int test;
 };
 
 //////////////////
@@ -73,6 +73,13 @@ struct rpi_gpio_regs {
 ////////////////
 
 #define SYS_TIMER_BASE (PERIPHERAL_BASE + 0x00003000)
+
+struct rpi_sys_timer_regs {
+  volatile int ctrlStatus;
+  volatile unsigned int cntLo;
+  volatile unsigned int cntHi;
+  volatile int compare[4];
+};
 
 /////////////
 // Mailbox /

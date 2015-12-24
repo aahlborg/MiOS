@@ -1,15 +1,15 @@
-void SetGpioFunction(int pin, int function);
-void SetGpio(int pin, int value);
+#include <inc/gpio.h>
+#include <inc/rpi_peripherals.h>
+#include <inc/system_timer.h>
 
 void kernel_main(void)
 {
-  volatile int counter;
-  SetGpioFunction(47, 1);
+  gpio_pin_set_function(BOARD_LED_GPIO_PIN, GPIO_FUNC_OUT);
   for (;;)
   {
-    SetGpio(47, 1);
-    for (counter = 0x3F0000; counter > 0; --counter) {}
-    SetGpio(47, 0);
-    for (counter = 0x3F0000; counter > 0; --counter) {}
+    gpio_pin_write(BOARD_LED_GPIO_PIN, 1);
+    wait_us(500000);
+    gpio_pin_write(BOARD_LED_GPIO_PIN, 0);
+    wait_us(500000);
   }
 }
