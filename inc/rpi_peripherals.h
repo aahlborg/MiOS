@@ -37,6 +37,8 @@ typedef volatile unsigned int reg_t;
 #define GPIO_FUNC_ALT4 3
 #define GPIO_FUNC_ALT5 2
 
+#define GPIO_FUNC_MASK 7
+
 #define GPIO_PULL_DISABLE 0
 #define GPIO_PULL_DOWN 1
 #define GPIO_PULL_UP 2
@@ -50,32 +52,32 @@ typedef volatile unsigned int reg_t;
 #endif
 
 struct rpi_gpio_regs {
-  volatile int gpioFunctionReg[6];
-  volatile int reserved0;
-  volatile int gpioPinOutputSet[2];
-  volatile int reserved1;
-  volatile int gpioPinOutputClear[2];
-  volatile int reserved2;
-  volatile int gpioPinLevel[2];
-  volatile int reserved3;
-  volatile int gpioPinEventDetectStatus[2];
-  volatile int reserved4;
-  volatile int gpioPinRisingEdgeDetectEnable[2];
-  volatile int reserved5;
-  volatile int gpioPinFallingEdgeDetectEnable[2];
-  volatile int reserved6;
-  volatile int gpioPinHighDetectEnable[2];
-  volatile int reserved7;
-  volatile int gpioPinLowDetectEnable[2];
-  volatile int reserved8;
-  volatile int gpioPinAsyncRisingEdgeDetect[2];
-  volatile int reserved9;
-  volatile int gpioPinAsyncFallingEdgeDetect[2];
-  volatile int reserved10;
-  volatile int gpioPinPullUpDownEnable;
-  volatile int gpioPinPullUpDownEnableClock[2];
-  volatile int reserved11;
-  volatile int test;
+  reg_t gpioFunctionReg[6];
+  reg_t reserved0;
+  reg_t gpioPinOutputSet[2];
+  reg_t reserved1;
+  reg_t gpioPinOutputClear[2];
+  reg_t reserved2;
+  reg_t gpioPinLevel[2];
+  reg_t reserved3;
+  reg_t gpioPinEventDetectStatus[2];
+  reg_t reserved4;
+  reg_t gpioPinRisingEdgeDetectEnable[2];
+  reg_t reserved5;
+  reg_t gpioPinFallingEdgeDetectEnable[2];
+  reg_t reserved6;
+  reg_t gpioPinHighDetectEnable[2];
+  reg_t reserved7;
+  reg_t gpioPinLowDetectEnable[2];
+  reg_t reserved8;
+  reg_t gpioPinAsyncRisingEdgeDetect[2];
+  reg_t reserved9;
+  reg_t gpioPinAsyncFallingEdgeDetect[2];
+  reg_t reserved10;
+  reg_t gpioPinPullUpDownEnable;
+  reg_t gpioPinPullUpDownEnableClock[2];
+  reg_t reserved11;
+  reg_t test;
 };
 
 //////////////////
@@ -86,10 +88,10 @@ struct rpi_gpio_regs {
 #define SYS_TIMER_FREQ 1000000
 
 struct rpi_sys_timer_regs {
-  volatile int ctrlStatus;
-  volatile unsigned int cntLo;
-  volatile unsigned int cntHi;
-  volatile int compare[4];
+  reg_t ctrlStatus;
+  reg_t cntLo;
+  reg_t cntHi;
+  reg_t compare[4];
 };
 
 /////////////
@@ -119,32 +121,32 @@ struct rpi_sys_timer_regs {
 #define AUX_MU_CNTL_TX_ENABLE (1 << 1)
 
 struct rpi_aux_regs {
-  volatile int irqStatus;
-  volatile int enables;
-  volatile int reserved0[14];
-  volatile int muIO;
-  volatile int muIrqEnable;
-  volatile int muIrqId;
-  volatile int muLineCtrl;
-  volatile int muModemCtrl;
-  volatile int muLineStatus;
-  volatile int muModemStatus;
-  volatile int muScratch;
-  volatile int muExtraCtrl;
-  volatile int muExtraStatus;
-  volatile int muBaudRate;
-  volatile int reserved1[5];
-  volatile int spi1reg0;
-  volatile int spi1reg1;
-  volatile int spi1reg2;
-  volatile int spi1reg3;
-  volatile int spi1reg4;
-  volatile int reserved2[10];
-  volatile int spi2reg0;
-  volatile int spi2reg1;
-  volatile int spi2reg2;
-  volatile int spi2reg3;
-  volatile int spi2reg4;
+  reg_t irqStatus;
+  reg_t enables;
+  reg_t reserved0[14];
+  reg_t muIO;
+  reg_t muIrqEnable;
+  reg_t muIrqId;
+  reg_t muLineCtrl;
+  reg_t muModemCtrl;
+  reg_t muLineStatus;
+  reg_t muModemStatus;
+  reg_t muScratch;
+  reg_t muExtraCtrl;
+  reg_t muExtraStatus;
+  reg_t muBaudRate;
+  reg_t reserved1[5];
+  reg_t spi1reg0;
+  reg_t spi1reg1;
+  reg_t spi1reg2;
+  reg_t spi1reg3;
+  reg_t spi1reg4;
+  reg_t reserved2[10];
+  reg_t spi2reg0;
+  reg_t spi2reg1;
+  reg_t spi2reg2;
+  reg_t spi2reg3;
+  reg_t spi2reg4;
 };
 
 #endif

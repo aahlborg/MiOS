@@ -16,7 +16,7 @@ void gpio_pin_set_function(int pin, int function)
   const int funcReg = pin / 10;
   const int funcRegShift = (pin % 10) * 3;
   const int funcVal = function << funcRegShift;
-  const int funcValMaskInv = ~(0x7 << funcRegShift);
+  const int funcValMaskInv = ~(GPIO_FUNC_MASK << funcRegShift);
   regs->gpioFunctionReg[funcReg] = (regs->gpioFunctionReg[funcReg] & funcValMaskInv) | funcVal;
 }
 
