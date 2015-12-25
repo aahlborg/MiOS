@@ -4,7 +4,7 @@ AS=$(TOOLCHAIN)-as
 LD=$(TOOLCHAIN)-ld
 OBJCP=$(TOOLCHAIN)-objcopy
 
-COPTS=-mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7
+COPTS=-mfpu=neon-vfpv4 -mfloat-abi=soft -march=armv7-a -mtune=cortex-a7
 CFLAGS=$(COPTS) -g -O3 -DRPI2 -I. -Wall
 LDFLAGS=-T kernel.ld
 
