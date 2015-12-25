@@ -5,7 +5,7 @@ LD=$(TOOLCHAIN)-ld
 OBJCP=$(TOOLCHAIN)-objcopy
 
 COPTS=-mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7
-CFLAGS=$(COPTS) -O3 -DRPI2 -I.
+CFLAGS=$(COPTS) -O3 -DRPI2 -I. -Wall
 LDFLAGS=-T kernel.ld
 
 BUILD=build/

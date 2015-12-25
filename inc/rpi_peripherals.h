@@ -15,6 +15,10 @@
 #define PERIPHERAL_BASE 0x20000000
 #endif
 
+#define SYS_FREQ 250000000
+
+typedef volatile unsigned int reg_t;
+
 //////////
 // GPIO /
 ////////
@@ -30,13 +34,19 @@
 #define GPIO_FUNC_ALT1 5
 #define GPIO_FUNC_ALT2 6
 #define GPIO_FUNC_ALT3 7
-#define GPIO_FUNC_ALT4 2
-#define GPIO_FUNC_ALT5 3
+#define GPIO_FUNC_ALT4 3
+#define GPIO_FUNC_ALT5 2
 
+#define GPIO_PULL_DISABLE 0
+#define GPIO_PULL_DOWN 1
+#define GPIO_PULL_UP 2
+
+#define GPIO_PIN_UART_TX 14
+#define GPIO_PIN_UART_RX 15
 #if defined(RPI2) || defined(RPI_PLUS)
-#define BOARD_LED_GPIO_PIN 47
+#define GPIO_PIN_BOARD_LED 47
 #else
-#define BOARD_LED_GPIO_PIN 16
+#define GPIO_PIN_BOARD_LED 16
 #endif
 
 struct rpi_gpio_regs {
@@ -73,6 +83,7 @@ struct rpi_gpio_regs {
 ////////////////
 
 #define SYS_TIMER_BASE (PERIPHERAL_BASE + 0x00003000)
+#define SYS_TIMER_FREQ 1000000
 
 struct rpi_sys_timer_regs {
   volatile int ctrlStatus;
@@ -86,5 +97,54 @@ struct rpi_sys_timer_regs {
 ///////////
 
 #define MAILBOX_BASE (PERIPHERAL_BASE + 0x0000B880)
+
+/////////////////////////////
+// Auxiliaries: UART & SPI /
+///////////////////////////
+
+#define AUX_BASE (PERIPHERAL_BASE + 0x00215000)
+
+#define AUX_IRQ_MU   (1 << 0)
+#define AUX_IRQ_SPI1 (1 << 0)
+#define AUX_IRQ_SPI2 (1 << 0)
+#define AUX_EN_MU   (1 << 0)
+#define AUX_EN_SPI1 (1 << 1)
+#define AUX_EN_SPI2 (1 << 2)
+#define AUX_MU_IIR_CLEAR_RX (1 << 1)
+#define AUX_MU_IIR_CLEAR_TX (1 << 2)
+#define AUX_MU_7BIT_MODE 0
+#define AUX_MU_8BIT_MODE 3
+#define AUX_MU_LSR_TX_EMPTY (1 << 5)
+#define AUX_MU_CNTL_RX_ENABLE (1 << 0)
+#define AUX_MU_CNTL_TX_ENABLE (1 << 1)
+
+struct rpi_aux_regs {
+  volatile int irqStatus;
+  volatile int enables;
+  volatile int reserved0[14];
+  volatile int muIO;
+  volatile int muIrqEnable;
+  volatile int muIrqId;
+  volatile int muLineCtrl;
+  volatile int muModemCtrl;
+  volatile int muLineStatus;
+  volatile int muModemStatus;
+  volatile int muScratch;
+  volatile int muExtraCtrl;
+  volatile int muExtraStatus;
+  volatile int muBaudRate;
+  volatile int reserved1[5];
+  volatile int spi1reg0;
+  volatile int spi1reg1;
+  volatile int spi1reg2;
+  volatile int spi1reg3;
+  volatile int spi1reg4;
+  volatile int reserved2[10];
+  volatile int spi2reg0;
+  volatile int spi2reg1;
+  volatile int spi2reg2;
+  volatile int spi2reg3;
+  volatile int spi2reg4;
+};
 
 #endif
