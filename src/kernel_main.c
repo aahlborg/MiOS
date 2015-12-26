@@ -17,10 +17,12 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   for (;;)
   {
     gpio_pin_write(GPIO_PIN_BOARD_LED, 1);
-    printf('1');
+    printf("1");
+    fflush(stdout);
     wait_us(500000);
     gpio_pin_write(GPIO_PIN_BOARD_LED, 0);
-    printf('0');
+    printf("0");
+    fflush(stdout);
     wait_us(500000);
   }
 }
