@@ -1,0 +1,33 @@
+Graphics
+- Set up framebuffer, requires mailbox code
+- Drawing functions
+
+Interrupts
+- Implement efficient and versatile interrupt handlers
+- Set up stack for all CPU modes
+- Disable/enable
+
+System timer
+- Timer interrupts
+
+UART
+- Asynchronous buffered interrupt based TX
+- Asynchronous buffered interrupt based RX
+
+SD card
+- Read from SD card
+- FAT fs support
+
+Processes
+- Process context and context switches
+
+Locking
+- Atomic operations
+- Semaphore
+- Mutex
+
+Dynamic loading of code
+- Load binary blob from SD or UART
+
+SMP
+- Boot up all cores

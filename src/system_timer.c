@@ -1,5 +1,5 @@
-#include <inc/rpi_peripherals.h>
-#include <inc/system_timer.h>
+#include <rpi_peripherals.h>
+#include <system_timer.h>
 
 unsigned int get_system_time(void)
 {

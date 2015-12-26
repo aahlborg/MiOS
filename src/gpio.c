@@ -1,5 +1,5 @@
-#include <inc/gpio.h>
-#include <inc/rpi_peripherals.h>
+#include <gpio.h>
+#include <rpi_peripherals.h>
 
 static void wait_cycles(int delay)
 {

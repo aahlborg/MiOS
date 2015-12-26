@@ -1,6 +1,6 @@
-#include <inc/uart.h>
-#include <inc/gpio.h>
-#include <inc/rpi_peripherals.h>
+#include <uart.h>
+#include <gpio.h>
+#include <rpi_peripherals.h>
 
 void uart_init(int baud, int bits)
 {

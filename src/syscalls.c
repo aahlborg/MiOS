@@ -1,5 +1,5 @@
 #include <sys/stat.h>
-#include <inc/uart.h>
+#include <uart.h>
 
 // End of kernel's static memory
 extern char _end;

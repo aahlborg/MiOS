@@ -1,4 +1,4 @@
-#include <inc/uart.h>
+#include <uart.h>
 
 void kernel_panic(void) __attribute__ ((noreturn));
 
