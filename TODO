@@ -2,6 +2,9 @@ Graphics
 - Set up framebuffer, requires mailbox code
 - Drawing functions
 
+Mailbox
+- Get information from GPU
+
 Interrupts
 - Implement efficient and versatile interrupt handlers
 - Set up stack for all CPU modes
@@ -20,6 +23,7 @@ SD card
 
 Processes
 - Process context and context switches
+- IPC
 
 Locking
 - Atomic operations
