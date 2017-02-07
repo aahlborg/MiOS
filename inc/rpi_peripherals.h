@@ -100,6 +100,23 @@ struct rpi_sys_timer_regs {
 
 #define MAILBOX_BASE (PERIPHERAL_BASE + 0x0000B880)
 
+#define MBOX_CHAN_FRAMEBUFFER 1
+#define MBOX_CHAN_VC_IF 8
+#define MBOX_CHAN_MAX 0xF
+#define MBOX_PTR_MASK 0xFFFFFFF0
+#define MBOX_FULL 0x80000000
+#define MBOX_EMPTY 0x40000000
+
+struct rpi_mbox_regs {
+  reg_t read;
+  reg_t reserved[3];
+  reg_t peek;
+  reg_t sender;
+  reg_t status;
+  reg_t config;
+  reg_t write;
+};
+
 /////////////////////////////
 // Auxiliaries: UART & SPI /
 ///////////////////////////
