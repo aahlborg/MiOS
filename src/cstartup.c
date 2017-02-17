@@ -1,9 +1,9 @@
+#include <kernel.h>
+
 extern int __bss_start__;
 extern int __bss_end__;
 
-extern void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags);
-
-void _cstartup(unsigned int r0, unsigned int r1, unsigned int atags)
+void __attribute__ ((noreturn)) _cstartup(unsigned int r0, unsigned int r1, unsigned int atags)
 {
   // volatile or GCC will optimize using memset, disable for now
   volatile int * bss_p = &__bss_start__;
@@ -15,4 +15,7 @@ void _cstartup(unsigned int r0, unsigned int r1, unsigned int atags)
   }
 
   _kernel_main(r0, r1, atags);
+
+  // In case main returns
+  kernel_panic();
 }

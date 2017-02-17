@@ -17,6 +17,9 @@ UART
 - Asynchronous buffered interrupt based TX
 - Asynchronous buffered interrupt based RX
 
+I2C
+- Communicate with simple device
+
 SD card
 - Read from SD card
 - FAT fs support

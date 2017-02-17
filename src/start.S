@@ -26,8 +26,23 @@ _fast_interrupt_vec:      .word fast_interrupt_isr
 
 .global _reset
 _reset:
-  /* Set stack pointer */
-  mov sp, #0x8000
+  /* Get core number */
+  mrc p15, 0, r3, c0, c0, 5
+  mov r4, #0x3
+  and r3, r4
+  /* Calculate and set stack pointer
+   * Start at 0x80000 and allocate 0x4000 for each core.
+   * sp starts at end of stack and grows downwards.
+   */
+  add r4, r3, #1
+  mov r5, #0x4000
+  mul r5, r4, r5
+  ldr r4, =_stack
+  add sp, r5, r4
+  /* Core 1-3 go directly to _core_main */
+  cmp r3, #0
+  movne r0, r3
+  bne _core_main
   /* Save r0-r2 which contain context information
    * set by the bootloader.
    */
@@ -42,6 +57,4 @@ _reset:
   /* Restore r0-r2 */
   pop {r0, r1, r2}
   /* Jump to main */
-  bl _cstartup
-  /* In case main returns */
-  b kernel_panic
+  b _cstartup
