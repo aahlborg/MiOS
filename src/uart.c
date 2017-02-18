@@ -6,6 +6,7 @@ void uart_init(int baud, int bits)
 {
   struct rpi_aux_regs * const regs = (struct rpi_aux_regs *)AUX_BASE;
 
+  // Configure mini UART
   regs->enables = AUX_EN_MU;
   regs->muIrqEnable = 0;
   regs->muExtraCtrl = 0;
@@ -18,12 +19,15 @@ void uart_init(int baud, int bits)
   regs->muModemCtrl = 0;
   regs->muIrqEnable = 0;
   regs->muIrqId = AUX_MU_IIR_CLEAR_RX | AUX_MU_IIR_CLEAR_TX;
+  // Calculate baud multiplier from sys frequency
   regs->muBaudRate = SYS_FREQ / (8 * baud) - 1;
 
+  // Configure Tx/Rx pins
   gpio_pin_set_function(GPIO_PIN_UART_TX, GPIO_FUNC_ALT5);
   gpio_pin_set_function(GPIO_PIN_UART_RX, GPIO_FUNC_ALT5);
   gpio_pin_set_pull_up_down(GPIO_PIN_UART_TX, GPIO_PULL_DISABLE);
 
+  // Enable UART Tx
   regs->muExtraCtrl = AUX_MU_CNTL_TX_ENABLE;
 }
 
@@ -31,7 +35,9 @@ void uart_write(char c)
 {
   struct rpi_aux_regs * const regs = (struct rpi_aux_regs *)AUX_BASE;
 
+  // Wait for previous write to finish
   while (0 == (regs->muLineStatus & AUX_MU_LSR_TX_EMPTY)) {}
 
+  // Send character
   regs->muIO = c;
 }
