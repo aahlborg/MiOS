@@ -61,3 +61,19 @@ void gpio_pin_set_pull_up_down(int pin, int value)
   regs->gpioPinPullUpDownEnable = 0;
   regs->gpioPinPullUpDownEnableClock[pinReg] = 0;
 }
+
+void enableJTAG(void)
+{
+  // nTRST: GPIO22 ALT4
+  gpio_pin_set_function(22, GPIO_FUNC_ALT4);
+  // TDI: GPIO4 ALT5
+  gpio_pin_set_function(4,  GPIO_FUNC_ALT5);
+  // TMS: GPIO27 ALT4
+  gpio_pin_set_function(27, GPIO_FUNC_ALT4);
+  // TCK: GPIO25 ALT4
+  gpio_pin_set_function(25, GPIO_FUNC_ALT4);
+  // RTCK: GPIO23 ALT4
+  gpio_pin_set_function(23, GPIO_FUNC_ALT4);
+  // TDO: GPIO24 ALT4
+  gpio_pin_set_function(24, GPIO_FUNC_ALT4);
+}

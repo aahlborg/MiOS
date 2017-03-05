@@ -43,6 +43,9 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   printf("CPSR: 0x%08x\r\n", value);
   printf("  Mode: 0x%02x (%s)\r\n", value & 0x3f, modes[value & 0xf]);
 
+  enableJTAG();
+  printf("Configured JTAG pins\r\n");
+
   // Read chip temp
   value = vc_get_temp();
   printf("Temp: %u.%u *C\r\n", value / 1000, value % 1000);

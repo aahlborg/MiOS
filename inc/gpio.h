@@ -13,4 +13,7 @@ void gpio_pin_write(int pin, int value);
 // Set pull state for input pin
 void gpio_pin_set_pull_up_down(int pin, int value);
 
+// Enable JTAG pins
+void enableJTAG(void);
+
 #endif
