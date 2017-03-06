@@ -28,6 +28,8 @@
 
 #define TEMPERATURE_ID 0
 
+#define ARM_ADDR_SPACE_MASK 0x3fffffff
+
 static unsigned int buffer[64] __attribute__((aligned(16)));
 
 // Read a single tag from the buffer
@@ -139,7 +141,8 @@ int vc_init_framebuffer(struct framebuffer_info * fb_info_p)
   if (val_p)
   {
     TRACE_DEBUG("Framebuffer addr 0x%08x+%u\r\n", val_p[0], val_p[1]);
-    fb_info_p->fb_pointer = (void *)val_p[0];
+    // Translate address to ARM address space
+    fb_info_p->fb_pointer = (void *)(val_p[0] & ARM_ADDR_SPACE_MASK);
     fb_info_p->fb_size = val_p[1];
   }
   else

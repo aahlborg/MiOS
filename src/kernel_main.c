@@ -28,6 +28,8 @@ char * modes[] = {
 
 void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
 {
+  unsigned short * fb_p;
+  struct framebuffer_info fb_info;
   unsigned int value;
 
   // Configure LED pin and UART
@@ -49,6 +51,23 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   // Read chip temp
   value = vc_get_temp();
   printf("Temp: %u.%u *C\r\n", value / 1000, value % 1000);
+
+  // Set up framebuffer
+  fb_info.width = 1920;
+  fb_info.height = 1080;
+  fb_info.bit_depth = 16;
+  if (!vc_init_framebuffer(&fb_info))
+    kernel_panic();
+  fb_p = fb_info.fb_pointer;
+  printf("Set up framebuffer at 0x%08x\r\n", (int)fb_p);
+
+  // Fill framebuffer with pattern
+  printf("Fill framebuffer\r\n");
+  for (value = 0; value < fb_info.fb_size / 2; value++)
+  {
+    fb_p[value] = value & 0xffff;
+  }
+  printf("Framebuffer pattern done\r\n");
 
   // Blink LED and print keep-alive message
   for (;;)
