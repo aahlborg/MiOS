@@ -148,7 +148,8 @@ int vc_init_framebuffer(struct framebuffer_info * fb_info_p)
   else
     return 0;
 
-  // Setup successful
+  // Setup successful, clear buffer and return
+  memset(fb_info_p->fb_pointer, 0, fb_info_p->fb_size);
   return 1;
 }
 

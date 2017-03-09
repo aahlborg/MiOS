@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 // Core entry point table
-static void (*core_entry_p[4])(void) = {0};
+static void (* volatile core_entry_p[4])(void) = {0};
 
 int get_core_num(void)
 {

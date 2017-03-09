@@ -1,9 +1,5 @@
 Graphics
-- Set up framebuffer, requires mailbox code
 - Drawing functions
-
-Mailbox
-- Get information from GPU
 
 Interrupts
 - Implement efficient and versatile interrupt handlers
@@ -35,6 +31,3 @@ Locking
 
 Dynamic loading of code
 - Load binary blob from SD or UART
-
-SMP
-- Boot up all cores
