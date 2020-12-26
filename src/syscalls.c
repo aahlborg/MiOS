@@ -1,5 +1,7 @@
 #include <sys/stat.h>
 #include <uart.h>
+#include <kernel.h>
+#include <errno.h>
 
 // End of kernel's static memory
 extern char _end;
@@ -56,4 +58,23 @@ int _lseek(int file, int ptr, int dir)
 {
   // Not implemented
   return 0;
+}
+
+void _exit(int status)
+{
+  // Not implemented, no return
+  kernel_panic();
+}
+
+int _kill(int pid, int sig)
+{
+  // Not implemented
+  errno = EINVAL;
+  return -1;
+}
+
+int _getpid(void)
+{
+  // Not implemented
+  return 1;
 }

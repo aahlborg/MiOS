@@ -29,11 +29,12 @@ char * modes[] = {
   "SYSTEM"     // 0x1f
 };
 
+static void draw_pattern(struct framebuffer_info * fb_info);
+
 void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
 {
-  struct framebuffer_info fb_info;
   unsigned int value;
-  unsigned int x, y;
+  struct framebuffer_info fb_info;
 
   // Configure LED pin and UART
   // These are the only means of debugging we have
@@ -67,9 +68,15 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   printf("  %dx%d %d-bit\r\n", fb_info.width, fb_info.height, fb_info.bit_depth);
 
   // Draw random pattern
-  x = fb_info.width / 2;
-  y = fb_info.height / 2;
-  value = 0;
+  draw_pattern(&fb_info);
+}
+
+void draw_pattern(struct framebuffer_info * fb_info)
+{
+  unsigned int x = fb_info->width / 2;
+  unsigned int y = fb_info->height / 2;
+  unsigned int value = 0;
+
   for (;;)
   {
     int dx, dy;
@@ -78,10 +85,10 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
     while (!(dy = random() & 0x3)) {}
     x1 = x - 2 + dx;
     y1 = y - 2 + dy;
-    if (x1 >= fb_info.width || y1 >= fb_info.height)
+    if (x1 >= fb_info->width || y1 >= fb_info->height)
       continue;
 
-    draw_line(&fb_info,
+    draw_line(fb_info,
       x, y, x1, y1,
       value);
     x = x1;
