@@ -3,6 +3,12 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+// Enable/disable interrupts
+#define disable() asm("cpsid i")
+#define enable() asm("cpsie i")
+#define disable_all() asm("cpsid if")
+#define enable_all() asm("cpsie if")
+
 // The OS entry point
 void _reset(void);
 

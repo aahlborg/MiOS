@@ -14,14 +14,13 @@ void gpio_pin_set_function(int pin, int function)
     return;
 
   // Find pin register and bit shift
-  struct rpi_gpio_regs * const regs = (struct rpi_gpio_regs *)GPIO_BASE;
   const int funcReg = pin / 10;
   const int funcRegShift = (pin % 10) * 3;
 
   // Insert function value into register
   const int funcVal = function << funcRegShift;
   const int funcValMaskInv = ~(GPIO_FUNC_MASK << funcRegShift);
-  regs->gpioFunctionReg[funcReg] = (regs->gpioFunctionReg[funcReg] & funcValMaskInv) | funcVal;
+  GPIO_REGS->gpioFunctionReg[funcReg] = (GPIO_REGS->gpioFunctionReg[funcReg] & funcValMaskInv) | funcVal;
 }
 
 void gpio_pin_write(int pin, int value)
@@ -30,15 +29,14 @@ void gpio_pin_write(int pin, int value)
     return;
 
   // Find pin register and bit shift
-  struct rpi_gpio_regs * const regs = (struct rpi_gpio_regs *)GPIO_BASE;
   const int pinReg = pin / 32;
   const int shift = pin % 32;
 
   // Set ON or OFF
   if (value)
-  	regs->gpioPinOutputSet[pinReg] = (1 << shift);
+  	GPIO_REGS->gpioPinOutputSet[pinReg] = (1 << shift);
   else
-  	regs->gpioPinOutputClear[pinReg] = (1 << shift);
+  	GPIO_REGS->gpioPinOutputClear[pinReg] = (1 << shift);
 }
 
 void gpio_pin_set_pull_up_down(int pin, int value)
@@ -47,19 +45,18 @@ void gpio_pin_set_pull_up_down(int pin, int value)
     return;
 
   // Find pin register and bit shift
-  struct rpi_gpio_regs * const regs = (struct rpi_gpio_regs *)GPIO_BASE;
   const int pinReg = pin / 32;
   const int shift = pin % 32;
 
   // Set preferred value and wait
-  regs->gpioPinPullUpDownEnable = value;
+  GPIO_REGS->gpioPinPullUpDownEnable = value;
   wait_cycles(150);
   // Configure pin and wait
-  regs->gpioPinPullUpDownEnableClock[pinReg] = (1 << shift);
+  GPIO_REGS->gpioPinPullUpDownEnableClock[pinReg] = (1 << shift);
   wait_cycles(150);
   // Reset registers
-  regs->gpioPinPullUpDownEnable = 0;
-  regs->gpioPinPullUpDownEnableClock[pinReg] = 0;
+  GPIO_REGS->gpioPinPullUpDownEnable = 0;
+  GPIO_REGS->gpioPinPullUpDownEnableClock[pinReg] = 0;
 }
 
 void enableJTAG(void)

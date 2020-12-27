@@ -95,6 +95,10 @@ _reset:
   ldr r4, =_stack
   add sp, r5, r4
 
+  /* Configure IRQ stack */
+  mov r4, #0x100000
+  msr SP_irq, r4
+
   /* Core 1-3 go directly to _core_main */
   cmp r3, #0
   movne r0, r3

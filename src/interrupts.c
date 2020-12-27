@@ -24,9 +24,10 @@ void __attribute__((interrupt("ABORT"))) prefetch_abort_isr(void)
 
 void __attribute__((interrupt("IRQ"))) interrupt_isr(void)
 {
-  // Not implemented
-  uart_write('Q');
-  kernel_panic();
+  // Only UART RX supported for now
+  disable();
+  uart_rx_isr();
+  enable();
 }
 
 void __attribute__((interrupt("FIQ"))) fast_interrupt_isr(void)

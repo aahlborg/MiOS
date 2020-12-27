@@ -80,6 +80,8 @@ struct rpi_gpio_regs {
   reg_t test;
 };
 
+#define GPIO_REGS ((struct rpi_gpio_regs *)GPIO_BASE)
+
 //////////////////
 // System timer /
 ////////////////
@@ -93,6 +95,8 @@ struct rpi_sys_timer_regs {
   reg_t cntHi;
   reg_t compare[4];
 };
+
+#define SYS_TIMER_REGS ((struct rpi_sys_timer_regs *)SYS_TIMER_BASE)
 
 /////////////
 // Mailbox /
@@ -117,6 +121,8 @@ struct rpi_mbox_regs {
   reg_t write;
 };
 
+#define MBOX_REGS ((struct rpi_mbox_regs *)MAILBOX_BASE)
+
 /////////////////////////////
 // Auxiliaries: UART & SPI /
 ///////////////////////////
@@ -129,11 +135,14 @@ struct rpi_mbox_regs {
 #define AUX_EN_MU   (1 << 0)
 #define AUX_EN_SPI1 (1 << 1)
 #define AUX_EN_SPI2 (1 << 2)
+#define AUX_MU_IER_ENABLE_TX (1 << 1)
+#define AUX_MU_IER_ENABLE_RX (1 << 0)
 #define AUX_MU_IIR_CLEAR_RX (1 << 1)
 #define AUX_MU_IIR_CLEAR_TX (1 << 2)
 #define AUX_MU_7BIT_MODE 0
 #define AUX_MU_8BIT_MODE 3
 #define AUX_MU_LSR_TX_EMPTY (1 << 5)
+#define AUX_MU_LSR_DATA_READY (1 << 0)
 #define AUX_MU_CNTL_RX_ENABLE (1 << 0)
 #define AUX_MU_CNTL_TX_ENABLE (1 << 1)
 
@@ -165,5 +174,31 @@ struct rpi_aux_regs {
   reg_t spi2reg3;
   reg_t spi2reg4;
 };
+
+#define AUX_REGS ((struct rpi_aux_regs *)AUX_BASE)
+
+////////////////
+// Interrupts /
+//////////////
+
+#define IRQ_BASE (PERIPHERAL_BASE + 0x0000B000)
+
+#define IRQ_AUX (1 << 29)
+
+struct rpi_irq_regs {
+  reg_t reserved[128];
+  reg_t irq_basic_pend;
+  reg_t irq_pend1;
+  reg_t irq_pend2;
+  reg_t fiq_control;
+  reg_t irq_en1;
+  reg_t irq_en2;
+  reg_t irq_basic_en;
+  reg_t irq_disable1;
+  reg_t irq_disable2;
+  reg_t irq_basic_disable;
+};
+
+#define IRQ_REGS ((struct rpi_irq_regs *)IRQ_BASE)
 
 #endif

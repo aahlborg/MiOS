@@ -29,12 +29,36 @@ char * modes[] = {
   "SYSTEM"     // 0x1f
 };
 
-static void draw_pattern(struct framebuffer_info * fb_info);
+static void echo_uart_lines(void)
+{
+  char buf[100];
+  int len = 0;
+
+  // Wait for UART data and print new lines
+  for (;;)
+  {
+    asm("wfi");
+    int size = uart_read(&buf[len]);
+    int newline = 0;
+    for (int i = 0; i < size; i++)
+    {
+      if (buf[len + i] == 10 ||
+          buf[len + i] == 13)
+        newline = 1;
+    }
+    len += size;
+    if (newline)
+    {
+      buf[len] = 0;
+      printf("%s\n", buf);
+      len = 0;
+    }
+  }
+}
 
 void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
 {
   unsigned int value;
-  struct framebuffer_info fb_info;
 
   // Configure LED pin and UART
   // These are the only means of debugging we have
@@ -58,43 +82,11 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   // Add a little thermal noise to the random generator
   rnd_seed(value);
 
-  // Set up framebuffer
-  fb_info.width = 1920;
-  fb_info.height = 1080;
-  fb_info.bit_depth = 16;
-  if (!vc_init_framebuffer(&fb_info))
-    kernel_panic();
-  printf("Set up framebuffer at 0x%08x\r\n", (int)fb_info.fb_pointer);
-  printf("  %dx%d %d-bit\r\n", fb_info.width, fb_info.height, fb_info.bit_depth);
+  // Enable interrupts
+  enable();
 
-  // Draw random pattern
-  draw_pattern(&fb_info);
-}
-
-void draw_pattern(struct framebuffer_info * fb_info)
-{
-  unsigned int x = fb_info->width / 2;
-  unsigned int y = fb_info->height / 2;
-  unsigned int value = 0;
-
-  for (;;)
-  {
-    int dx, dy;
-    unsigned int x1, y1;
-    while (!(dx = random() & 0x3)) {}
-    while (!(dy = random() & 0x3)) {}
-    x1 = x - 2 + dx;
-    y1 = y - 2 + dy;
-    if (x1 >= fb_info->width || y1 >= fb_info->height)
-      continue;
-
-    draw_line(fb_info,
-      x, y, x1, y1,
-      value);
-    x = x1;
-    y = y1;
-    value++;
-  }
+  // Echo UART input
+  echo_uart_lines();
 }
 
 void __attribute__ ((noreturn)) kernel_panic(void)

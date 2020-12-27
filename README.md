@@ -40,6 +40,7 @@ The code is provided as-is and you are free to use it for any purpose. I will pr
 
 - http://www.raspberrypi.org/wp-content/uploads/2012/02/BCM2835-ARM-Peripherals.pdf
 - https://github.com/raspberrypi/firmware/wiki/Mailboxes
+- https://s-matyukevich.github.io/raspberry-pi-os/
 
 ### Multicore
 
@@ -61,3 +62,5 @@ The code is provided as-is and you are free to use it for any purpose. I will pr
 
 - https://github.com/SharpCoder/rpi-kernel
 - https://github.com/dwelch67/raspberrypi
+- https://bitbucket.org/csowter/redkernel/src/master/
+- https://github.com/bztsrc/raspi3-tutorial

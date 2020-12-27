@@ -6,13 +6,11 @@ void mailbox_write(unsigned int msg, int channel)
   if ((msg & ~MBOX_PTR_MASK) || channel > MBOX_CHAN_MAX)
     return;
 
-  struct rpi_mbox_regs * const mbox0 = (struct rpi_mbox_regs *)MAILBOX_BASE;
-
   // Wait for mailbox to become available
-  while (mbox0->status & MBOX_FULL) {}
+  while (MBOX_REGS->status & MBOX_FULL) {}
 
   // Put message in mailbox
-  mbox0->write = (msg | channel);
+  MBOX_REGS->write = (msg | channel);
 }
 
 unsigned int mailbox_read(int channel)
@@ -22,15 +20,13 @@ unsigned int mailbox_read(int channel)
   if (channel > MBOX_CHAN_MAX)
     return 0;
 
-  struct rpi_mbox_regs * const mbox0 = (struct rpi_mbox_regs *)MAILBOX_BASE;
-
   for (;;)
   {
     // Wait for mailbox to become populated
-    while (mbox0->status & MBOX_EMPTY) {}
+    while (MBOX_REGS->status & MBOX_EMPTY) {}
 
     // Read message and verify channel
-    msg = mbox0->read;
+    msg = MBOX_REGS->read;
     if ((msg & ~MBOX_PTR_MASK) == channel)
       return (msg & MBOX_PTR_MASK);
   }

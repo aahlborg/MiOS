@@ -37,7 +37,11 @@ void __attribute__ ((noreturn)) _core_main(unsigned int core_num)
     kernel_panic();
 
   // Make sure that entry point is set
-  while (!core_entry_p[core_num]) {}
+  while (!core_entry_p[core_num])
+  {
+    // Wait for interrupt
+    asm("wfi");
+  }
 
   // Call function
   core_entry_p[core_num]();
