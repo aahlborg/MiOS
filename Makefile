@@ -9,7 +9,7 @@ OBJCP=$(TOOLCHAIN)-objcopy
 ASOPTS=-mcpu=cortex-a7 -mfpu=neon-vfpv4
 COPTS=-mfpu=neon-vfpv4 -mfloat-abi=soft -march=armv7-a -mtune=cortex-a7
 CFLAGS=$(COPTS) -g -O3 -DRPI2 -Iinc -Wall
-LDFLAGS=-T kernel.ld
+LDFLAGS=-T kernel.ld -Xlinker -Map=$(TARGET).map
 
 # Directories
 BUILD=build/
@@ -39,7 +39,7 @@ $(BUILD):
 	mkdir build
 
 # Link ELF and generate binary image
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) kernel.ld
 	@echo "$(C_RED)Linking $@$(C_NONE)"
 	$(Q)$(CC) $(LDFLAGS) -nostartfiles $(OBJECTS) -o $@.elf
 	$(Q)$(OBJCP) $@.elf -O binary $@
