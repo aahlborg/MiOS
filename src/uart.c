@@ -1,6 +1,7 @@
 #include <uart.h>
 #include <gpio.h>
 #include <rpi_peripherals.h>
+#include <kernel.h>
 
 #define BUF_SIZE (1024u)
 
@@ -11,8 +12,16 @@ struct buffer {
   char buf[BUF_SIZE];
 };
 
-// UART Rx buffer
+// UART interrupt handlers
+static void uart_rx_isr(void);
+static void uart_tx_isr(void);
+
+// UART buffers
+static struct buffer tx_buffer;
 static struct buffer rx_buffer;
+
+// Statistics data
+static struct uart_stats stats;
 
 static void buf_append(struct buffer * buf, char c)
 {
@@ -41,6 +50,35 @@ static char buf_get(struct buffer * buf)
   return c;
 }
 
+static void uart_tx_isr(void)
+{
+  int fifo_len = (AUX_REGS->muExtraStatus & AUX_MU_STAT_TX_FIFO) >> 24;
+  int avail = AUX_MU_FIFO_SIZE - fifo_len - 1;
+  for (int i = 0; i < avail; i++)
+  {
+    if (buf_len(&tx_buffer))
+    {
+      // Write next char
+      AUX_REGS->muIO = buf_get(&tx_buffer);
+    }
+    else
+    {
+      // Disable Tx interrupt
+      AUX_REGS->muIrqEnable = AUX_MU_IER_ENABLE_RX;
+      break;
+    }
+  }
+}
+
+static void uart_rx_isr(void)
+{
+  // Read from Rx queue
+  while (AUX_REGS->muExtraStatus & AUX_MU_STAT_RX_FIFO)
+  {
+    buf_append(&rx_buffer, AUX_REGS->muIO & 0xff);
+  }
+}
+
 void uart_init(int baud, int bits)
 {
   // Configure mini UART
@@ -63,6 +101,8 @@ void uart_init(int baud, int bits)
   gpio_pin_set_pull_up_down(GPIO_PIN_UART_TX, GPIO_PULL_DISABLE);
 
   // Init buffers
+  tx_buffer.start = 0;
+  tx_buffer.end = 0;
   rx_buffer.start = 0;
   rx_buffer.end = 0;
 
@@ -71,33 +111,71 @@ void uart_init(int baud, int bits)
   AUX_REGS->muIrqId = AUX_MU_IIR_CLEAR_RX | AUX_MU_IIR_CLEAR_TX;
   IRQ_REGS->irq_en1 |= IRQ_AUX;
 
-  // Enable UART Tx
-  AUX_REGS->muExtraCtrl = AUX_MU_CNTL_TX_ENABLE;
+  // Enable UART
+  AUX_REGS->muExtraCtrl = AUX_MU_CNTL_RX_ENABLE | AUX_MU_CNTL_TX_ENABLE;
 }
 
-void uart_write(char c)
+void uart_write_ch(char c)
 {
-  // Wait for previous write to finish
-  while (0 == (AUX_REGS->muLineStatus & AUX_MU_LSR_TX_EMPTY)) {}
+  disable();
 
-  // Send character
-  AUX_REGS->muIO = c;
+  // Add to Tx buffer
+  buf_append(&tx_buffer, c);
+
+  // Enable Tx interrupt
+  AUX_REGS->muIrqEnable = AUX_MU_IER_ENABLE_RX | AUX_MU_IER_ENABLE_TX;
+
+  enable();
+  stats.tx_count++;
+}
+
+void uart_write(char * str, int length)
+{
+  disable();
+
+  // Add to Tx buffer
+  for (int i = 0; i < length; i++)
+  {
+    buf_append(&tx_buffer, str[i]);
+  }
+
+  // Enable Tx interrupt
+  AUX_REGS->muIrqEnable = AUX_MU_IER_ENABLE_RX | AUX_MU_IER_ENABLE_TX;
+
+  enable();
+
+  stats.tx_count += length;
 }
 
 int uart_read(char * buffer)
 {
+  disable();
   // Check length of Rx buffer and return all data
   int length = buf_len(&rx_buffer);
   for (int i = 0; i < length; i++)
   {
     buffer[i] = buf_get(&rx_buffer);
   }
+  enable();
+  stats.rx_count += length;
   return length;
 }
 
-void uart_rx_isr(void)
+void uart_isr(void)
 {
-  // Read char and reset interrupt
-  buf_append(&rx_buffer, AUX_REGS->muIO & 0xff);
-  AUX_REGS->muIrqId = AUX_MU_IIR_CLEAR_RX;
+  unsigned int status = AUX_REGS->muIrqId;
+  if (status & AUX_MU_IIR_RX_PENDING)
+  {
+    uart_rx_isr();
+  }
+  if (status & AUX_MU_IIR_TX_PENDING)
+  {
+    uart_tx_isr();
+  }
+  stats.isr_count++;
+}
+
+struct uart_stats uart_get_stats(void)
+{
+  return stats;
 }

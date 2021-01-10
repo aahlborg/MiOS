@@ -6,7 +6,7 @@ This code was written by me while trying to learn about the inner secrets of the
 
 To build this code you need an ARM bare metal toolchain. I use the gcc-arm-none-eabi toolchain that comes with Ubuntu but other versions should work just fine.
 
-Simply running make will create a build/kernel7.img that can be compied to an SD card which has been prepared with a boot partition and the raspberry pi bootloader.
+Simply running make will create a build/kernel7.img that can be copied to an SD card which has been prepared with a boot partition and the Raspberry Pi bootloader.
 
 ## Emulation
 
@@ -17,7 +17,7 @@ Run qemu-system-arm with machine raspi2 and UART1 mapped to stdio:
 To debug the system, add -s -S to the qemu command and connect gdb-multiarch to the gdbserver
 
     # gdb-multiarch build/kernel7.img.elf
-    (gdb) set architecture arm
+    (gdb) set arch arm
     (gdb) target remote :1234
 
 Or set up VS Code to connect using
@@ -39,6 +39,7 @@ The code is provided as-is and you are free to use it for any purpose. I will pr
 ### Documentation
 
 - http://www.raspberrypi.org/wp-content/uploads/2012/02/BCM2835-ARM-Peripherals.pdf
+- https://elinux.org/BCM2835_datasheet_errata
 - https://github.com/raspberrypi/firmware/wiki/Mailboxes
 - https://s-matyukevich.github.io/raspberry-pi-os/
 

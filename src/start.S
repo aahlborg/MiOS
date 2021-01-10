@@ -86,18 +86,18 @@ _reset:
   and r3, r4
 
   /* Calculate and set stack pointer
-   * Start at _stack_start and allocate KSTACK for each core.
+   * Start at _stack_start and allocate _KSTACK for each core.
    * sp starts at end of stack and grows downwards.
    */
   add r4, r3, #1
-  ldr r5, =KSTACK
+  ldr r5, =_KSTACK
   mul r5, r4, r5
   ldr r4, =_stack_start
   add sp, r5, r4
 
   /* Configure IRQ stack */
   add r4, r3, #1
-  ldr r5, =ISTACK
+  ldr r5, =_ISTACK
   mul r5, r4, r5
   ldr r4, =_istack_start
   add r4, r5, r4

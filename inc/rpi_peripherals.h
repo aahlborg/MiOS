@@ -139,12 +139,17 @@ struct rpi_mbox_regs {
 #define AUX_MU_IER_ENABLE_RX (1 << 0)
 #define AUX_MU_IIR_CLEAR_RX (1 << 1)
 #define AUX_MU_IIR_CLEAR_TX (1 << 2)
+#define AUX_MU_IIR_TX_PENDING (1 << 1)
+#define AUX_MU_IIR_RX_PENDING (1 << 2)
 #define AUX_MU_7BIT_MODE 0
 #define AUX_MU_8BIT_MODE 3
 #define AUX_MU_LSR_TX_EMPTY (1 << 5)
 #define AUX_MU_LSR_DATA_READY (1 << 0)
 #define AUX_MU_CNTL_RX_ENABLE (1 << 0)
 #define AUX_MU_CNTL_TX_ENABLE (1 << 1)
+#define AUX_MU_STAT_RX_FIFO (0xf << 16)
+#define AUX_MU_STAT_TX_FIFO (0xf << 24)
+#define AUX_MU_FIFO_SIZE (8u)
 
 struct rpi_aux_regs {
   reg_t irqStatus;

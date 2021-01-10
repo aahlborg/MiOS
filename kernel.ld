@@ -50,19 +50,19 @@ SECTIONS
   _end = .; PROVIDE (end = .);
 
   /* 4 cores for RPI2 */
-  NUM_CORES = 4;
+  _NUM_CORES = 4;
   .stack 0x80000:
   {
     /* 16K kernel stack per CPU */
-    KSTACK = 16K;
+    _KSTACK = 16K;
     _stack_start = .;
-    . = . + KSTACK * NUM_CORES;
+    . = . + _KSTACK * _NUM_CORES;
     _stack_end = .;
 
     /* 4K interrupt stack per CPU */
-    ISTACK = 4K;
+    _ISTACK = 4K;
     _istack_start = .;
-    . = . + ISTACK * NUM_CORES;
+    . = . + _ISTACK * _NUM_CORES;
     _istack_end = .;
     *(.stack)
   }

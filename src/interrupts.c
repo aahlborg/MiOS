@@ -4,35 +4,33 @@
 void __attribute__((interrupt("UNDEF"))) illegal_instruction_isr(void)
 {
   // Not implemented
-  uart_write('O');
+  uart_write_ch('O');
   kernel_panic();
 }
 
 void __attribute__((interrupt("SWI"))) software_interrupt_isr(void)
 {
   // Not implemented
-  uart_write('S');
+  uart_write_ch('S');
   kernel_panic();
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_isr(void)
 {
   // Not implemented
-  uart_write('P');
+  uart_write_ch('P');
   kernel_panic();
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_isr(void)
 {
-  // Only UART RX supported for now
-  disable();
-  uart_rx_isr();
-  enable();
+  // Only UART supported for now
+  uart_isr();
 }
 
 void __attribute__((interrupt("FIQ"))) fast_interrupt_isr(void)
 {
   // Not implemented
-  uart_write('F');
+  uart_write_ch('F');
   kernel_panic();
 }

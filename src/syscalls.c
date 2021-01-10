@@ -45,12 +45,7 @@ int _read(int file, char *ptr, int len)
 
 int _write(int file, char *ptr, int len)
 {
-  int i;
-  for (i = 0; i < len; ++i)
-  {
-    // Write string to UART
-    uart_write(*(ptr++));
-  }
+  uart_write(ptr, len);
   return len;
 }
 

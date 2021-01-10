@@ -51,6 +51,8 @@ static void echo_uart_lines(void)
     {
       buf[len] = 0;
       printf("%s\n", buf);
+      struct uart_stats stats = uart_get_stats();
+      printf("tx: %u, rx: %u, isr: %u\n", stats.tx_count, stats.rx_count, stats.isr_count);
       len = 0;
     }
   }
@@ -64,6 +66,9 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   // These are the only means of debugging we have
   gpio_pin_set_function(GPIO_PIN_BOARD_LED, GPIO_FUNC_OUT);
   uart_init(115200, 8);
+
+  // Enable interrupts
+  enable_all();
 
   // Print welcome message
   printf("\r\nMiOS kernel boot\r\n");
@@ -81,9 +86,6 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   printf("Temp: %u.%u *C\r\n", value / 1000, value % 1000);
   // Add a little thermal noise to the random generator
   rnd_seed(value);
-
-  // Enable interrupts
-  enable();
 
   // Echo UART input
   echo_uart_lines();
