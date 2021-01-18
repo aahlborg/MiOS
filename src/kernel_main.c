@@ -1,14 +1,15 @@
+#include <drawing.h>
 #include <gpio.h>
+#include <irq.h>
+#include <kernel.h>
+#include <random.h>
 #include <rpi_peripherals.h>
+#include <smp.h>
+#include <stdio.h>
+#include <string.h>
 #include <system_timer.h>
 #include <uart.h>
-#include <stdio.h>
-#include <smp.h>
 #include <vc_if.h>
-#include <kernel.h>
-#include <drawing.h>
-#include <string.h>
-#include <random.h>
 
 char * modes[] = {
   "USR",       // 0x10
@@ -74,7 +75,7 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   uart_init(115200, 8);
 
   // Enable interrupts
-  enable_all();
+  enable();
 
   // Print welcome message
   printf("\r\nMiOS kernel boot\r\n");

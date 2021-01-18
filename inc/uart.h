@@ -26,9 +26,6 @@ void uart_write(char * str, int length);
 // Read from UART Rx buffer
 int uart_read(char * buffer);
 
-// UART interrupt handler
-void uart_isr(void);
-
 // Read UART statistics
 struct uart_stats uart_get_stats(void);
 

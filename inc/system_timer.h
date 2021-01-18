@@ -9,13 +9,10 @@
 #define SYS_TIMER_3 3
 
 // Timer callback function type
-typedef void (timer_callback_t)(int);
+typedef void (timer_callback_t)(int timer);
 
 // Initialize system timer interrupt
 void init_system_timer(int timer, int period, timer_callback_t * callback);
-
-// Interrupt handler for the system timer
-void system_timer_isr(void);
 
 // Read the system timer as a 32-bit microsecond counter
 unsigned int get_system_time(void);

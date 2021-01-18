@@ -2,6 +2,7 @@
 #include <gpio.h>
 #include <rpi_peripherals.h>
 #include <kernel.h>
+#include <irq.h>
 
 #define BUF_SIZE (1024u)
 
@@ -79,6 +80,20 @@ static void uart_rx_isr(void)
   }
 }
 
+static void uart_isr(int irq)
+{
+  unsigned int status = AUX_REGS->muIrqId;
+  if (status & AUX_MU_IIR_RX_PENDING)
+  {
+    uart_rx_isr();
+  }
+  if (status & AUX_MU_IIR_TX_PENDING)
+  {
+    uart_tx_isr();
+  }
+  stats.isr_count++;
+}
+
 void uart_init(int baud, int bits)
 {
   // Configure mini UART
@@ -109,7 +124,9 @@ void uart_init(int baud, int bits)
   // Enable Rx interrupt
   AUX_REGS->muIrqEnable = AUX_MU_IER_ENABLE_RX;
   AUX_REGS->muIrqId = AUX_MU_IIR_CLEAR_RX | AUX_MU_IIR_CLEAR_TX;
-  IRQ_REGS->irq_en1 |= IRQ_AUX;
+
+  // Register interrupt handler
+  register_isr(IRQ_AUX, uart_isr);
 
   // Enable UART
   AUX_REGS->muExtraCtrl = AUX_MU_CNTL_RX_ENABLE | AUX_MU_CNTL_TX_ENABLE;
@@ -163,20 +180,6 @@ int uart_read(char * buffer)
   enable();
   stats.rx_count += length;
   return length;
-}
-
-void uart_isr(void)
-{
-  unsigned int status = AUX_REGS->muIrqId;
-  if (status & AUX_MU_IIR_RX_PENDING)
-  {
-    uart_rx_isr();
-  }
-  if (status & AUX_MU_IIR_TX_PENDING)
-  {
-    uart_tx_isr();
-  }
-  stats.isr_count++;
 }
 
 struct uart_stats uart_get_stats(void)

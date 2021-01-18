@@ -192,12 +192,11 @@ struct rpi_aux_regs {
 
 #define IRQ_BASE (PERIPHERAL_BASE + 0x0000B200)
 
-#define IRQ_SYS_TIMER_0 (1 << 0)
-#define IRQ_SYS_TIMER_1 (1 << 1)
-#define IRQ_SYS_TIMER_2 (1 << 2)
-#define IRQ_SYS_TIMER_3 (1 << 3)
-#define IRQ_SYS_TIMERS (IRQ_SYS_TIMER_0 | IRQ_SYS_TIMER_1 | IRQ_SYS_TIMER_2 | IRQ_SYS_TIMER_3)
-#define IRQ_AUX (1 << 29)
+#define IRQ_SYS_TIMER_0 0
+#define IRQ_SYS_TIMER_1 1
+#define IRQ_SYS_TIMER_2 2
+#define IRQ_SYS_TIMER_3 3
+#define IRQ_AUX 29
 
 struct rpi_irq_regs {
   reg_t irq_basic_pend;

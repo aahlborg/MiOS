@@ -1,5 +1,6 @@
 #include <rpi_peripherals.h>
 #include <system_timer.h>
+#include <irq.h>
 
 struct timer {
   unsigned int period;
@@ -7,6 +8,27 @@ struct timer {
 };
 
 static struct timer timers[SYS_TIMER_COUNT];
+
+static void system_timer_isr(int irq)
+{
+   if (IRQ_SYS_TIMER_1 == irq)
+  {
+    // Clear interrupt
+    SYS_TIMER_REGS->ctrlStatus = SYS_TIMER_M1;
+    timers[SYS_TIMER_1].callback(SYS_TIMER_1);
+    // Reset timer
+    SYS_TIMER_REGS->compare[SYS_TIMER_1] += timers[SYS_TIMER_1].period;
+  }
+  else if (IRQ_SYS_TIMER_3 == irq)
+  {
+    // Clear interrupt
+    SYS_TIMER_REGS->ctrlStatus = SYS_TIMER_M3;
+    timers[SYS_TIMER_3].callback(SYS_TIMER_3);
+    // Reset timer
+    SYS_TIMER_REGS->compare[SYS_TIMER_3] += timers[SYS_TIMER_3].period;
+  }
+}
+
 
 void init_system_timer(int timer, int period, timer_callback_t * callback)
 {
@@ -18,31 +40,11 @@ void init_system_timer(int timer, int period, timer_callback_t * callback)
   // Only timers 1 and 3 are supported and enabling other interrupts may be dangerous
   if (SYS_TIMER_1 == timer)
   {
-    IRQ_REGS->irq_en1 |= IRQ_SYS_TIMER_1;
+    register_isr(IRQ_SYS_TIMER_1, system_timer_isr);
   }
-  else if (SYS_TIMER_3)
+  else if (SYS_TIMER_3 == timer)
   {
-    IRQ_REGS->irq_en1 |= IRQ_SYS_TIMER_3;
-  }
-}
-
-void system_timer_isr(void)
-{
-  if (SYS_TIMER_REGS->ctrlStatus & SYS_TIMER_M3)
-  {
-    // Clear interrupt
-    SYS_TIMER_REGS->ctrlStatus = SYS_TIMER_M3;
-    timers[SYS_TIMER_3].callback(SYS_TIMER_3);
-    // Reset timer
-    SYS_TIMER_REGS->compare[SYS_TIMER_3] += timers[SYS_TIMER_3].period;
-  }
-  else if (SYS_TIMER_REGS->ctrlStatus & SYS_TIMER_M1)
-  {
-    // Clear interrupt
-    SYS_TIMER_REGS->ctrlStatus = SYS_TIMER_M1;
-    timers[SYS_TIMER_1].callback(SYS_TIMER_1);
-    // Reset timer
-    SYS_TIMER_REGS->compare[SYS_TIMER_1] += timers[SYS_TIMER_1].period;
+    register_isr(IRQ_SYS_TIMER_3, system_timer_isr);
   }
 }
 
