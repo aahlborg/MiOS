@@ -50,12 +50,18 @@ static void echo_uart_lines(void)
     if (newline)
     {
       buf[len] = 0;
-      printf("%s\n", buf);
+      printf("%s\r\n", buf);
       struct uart_stats stats = uart_get_stats();
-      printf("tx: %u, rx: %u, isr: %u\n", stats.tx_count, stats.rx_count, stats.isr_count);
+      printf("tx: %u, rx: %u, isr: %u\r\n", stats.tx_count, stats.rx_count, stats.isr_count);
       len = 0;
     }
   }
+}
+
+static void timer_callback(int timer)
+{
+  // Print a T every timer interrupt
+  uart_write_ch_isr('T');
 }
 
 void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
@@ -86,6 +92,9 @@ void _kernel_main(unsigned int r0, unsigned int r1, unsigned int atags)
   printf("Temp: %u.%u *C\r\n", value / 1000, value % 1000);
   // Add a little thermal noise to the random generator
   rnd_seed(value);
+
+  // Start timer interrupt at 1 second interval
+  init_system_timer(SYS_TIMER_3, 1000000, timer_callback);
 
   // Echo UART input
   echo_uart_lines();

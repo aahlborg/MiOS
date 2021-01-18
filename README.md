@@ -35,6 +35,7 @@ The code is provided as-is and you are free to use it for any purpose. I will pr
 
 - http://www.valvers.com/open-software/raspberry-pi/step01-bare-metal-programming-in-cpt1
 - http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/os
+- https://azeria-labs.com/writing-arm-assembly-part-1/
 
 ### Documentation
 

@@ -118,14 +118,18 @@ void uart_init(int baud, int bits)
 void uart_write_ch(char c)
 {
   disable();
+  uart_write_ch_isr(c);
+  enable();
+}
 
+void uart_write_ch_isr(char c)
+{
   // Add to Tx buffer
   buf_append(&tx_buffer, c);
 
   // Enable Tx interrupt
   AUX_REGS->muIrqEnable = AUX_MU_IER_ENABLE_RX | AUX_MU_IER_ENABLE_TX;
 
-  enable();
   stats.tx_count++;
 }
 

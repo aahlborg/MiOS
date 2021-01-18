@@ -2,10 +2,6 @@ Interrupts
 - Implement efficient and versatile interrupt handlers
 - Set up stack for all CPU modes
 
-System timer
-- Timer interrupts
-- ARM timer: https://github.com/dwelch67/raspberrypi/blob/master/blinker03/
-
 I2C
 - Communicate with simple device
 

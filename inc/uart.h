@@ -17,6 +17,9 @@ void uart_init(int baud, int bits);
 // Write a character to UART Tx buffer
 void uart_write_ch(char c);
 
+// Write a character to UART Tx buffer in ISR context
+void uart_write_ch_isr(char c);
+
 // Write a string to UART Tx buffer
 void uart_write(char * str, int length);
 

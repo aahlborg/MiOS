@@ -88,6 +88,10 @@ struct rpi_gpio_regs {
 
 #define SYS_TIMER_BASE (PERIPHERAL_BASE + 0x00003000)
 #define SYS_TIMER_FREQ 1000000
+#define SYS_TIMER_M0 (1 << 0)
+#define SYS_TIMER_M1 (1 << 1)
+#define SYS_TIMER_M2 (1 << 2)
+#define SYS_TIMER_M3 (1 << 3)
 
 struct rpi_sys_timer_regs {
   reg_t ctrlStatus;
@@ -186,12 +190,16 @@ struct rpi_aux_regs {
 // Interrupts /
 //////////////
 
-#define IRQ_BASE (PERIPHERAL_BASE + 0x0000B000)
+#define IRQ_BASE (PERIPHERAL_BASE + 0x0000B200)
 
+#define IRQ_SYS_TIMER_0 (1 << 0)
+#define IRQ_SYS_TIMER_1 (1 << 1)
+#define IRQ_SYS_TIMER_2 (1 << 2)
+#define IRQ_SYS_TIMER_3 (1 << 3)
+#define IRQ_SYS_TIMERS (IRQ_SYS_TIMER_0 | IRQ_SYS_TIMER_1 | IRQ_SYS_TIMER_2 | IRQ_SYS_TIMER_3)
 #define IRQ_AUX (1 << 29)
 
 struct rpi_irq_regs {
-  reg_t reserved[128];
   reg_t irq_basic_pend;
   reg_t irq_pend1;
   reg_t irq_pend2;
